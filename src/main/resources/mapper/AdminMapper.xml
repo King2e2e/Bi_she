@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.mapper.AdminMapper">
+    <!-- SQL 语句写在这里 -->
+    <!-- 如果表结构变化，比如添加了 age 字段 -->
+    <sql id="Base_Column-List">
+        id,username,password,name,phone,email,avatar,role   <!-- 只改这里 -->
+    </sql>
+
+    <select id="selectAll" resultType="org.example.entity.Admin">
+        select
+        <include refid="Base_Column-List"/>  <!--引用上面的Base-Column-List标签-->
+        from admin
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="username != null">and username like concat('%',#{username},'%')</if>  <!--模糊查询姓名前面后面都百分号%自动匹配-->
+            <if test="password != null">and password = #{password}</if>
+            <if test="name != null">and name = #{name}</if>
+            <if test="phone != null">and phone = #{phone}</if>
+            <if test="email != null">and email = #{email}</if>
+            <if test="avatar != null">and avatar = #{avatar}</if>
+            <if test="role != null">and role = #{role}</if>
+        </where>
+    </select>
+
+
+    <!--resultType指定返回结果的类型主要用于<select>,parameterType指定传入参数的类型可用于 <insert>、<update>、<delete>、<select>-->
+    <!--useGeneratedKeys是是否使用数据库生成的主键-->
+    <!--     <where>标签   用途:处理 WHERE 子句，去掉多余的 AND/OR       适用场景:查询条件   -->
+    <!--     <trim>标签    用途:通用的修剪标签，可定制前缀/后缀/去多余字符   适用场景:插入、更新等   -->
+<!--
+    属性	                作用	                例子
+    prefix	            在内容前加前缀	        prefix="("
+    suffix	            在内容后加后缀	        suffix=")"
+    prefixOverrides	    去掉内容开头多余的字符	prefixOverrides="AND丨OR"
+    suffixOverrides	    去掉内容结尾多余的字符	suffixOverrides=","      -->
+    <insert id="insert" parameterType="org.example.entity.Admin" useGeneratedKeys="true" keyProperty="id">
+        insert into admin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">username,</if>
+            <if test="password != null">password,</if>
+            <if test="name != null">name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="role != null">role,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">#{username},</if>
+            <if test="password != null">#{password},</if>
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="role != null">#{role},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteById">
+        delete from admin
+        where id = #{id}
+    </delete>
+
+    <update id="updateById" parameterType="org.example.entity.Admin">
+        update admin
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectById" resultType="org.example.entity.Admin">
+        select
+        <include refid="Base_Column-List"/>
+        from admin
+        where id = #{id}
+    </select>
+
+</mapper>

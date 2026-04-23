@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.mapper.SysUserMapper">
+
+    <!-- 公共查询字段 -->
+    <sql id="Base_Column_List">
+        id, username, password, nickname, phone, email, avatar, status, deleted,
+        last_login_time, create_time, update_time
+    </sql>
+
+    <!-- 新增用户 -->
+    <insert id="insert" parameterType="org.example.entity.SysUser" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">username,</if>
+            <if test="password != null">password,</if>
+            <if test="nickname != null">nickname,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="status != null">status,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="lastLoginTime != null">last_login_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">#{username},</if>
+            <if test="password != null">#{password},</if>
+            <if test="nickname != null">#{nickname},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="status != null">#{status},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="lastLoginTime != null">#{lastLoginTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 更新最后登录时间 -->
+    <update id="updateLastLoginTime" parameterType="org.example.entity.SysUser">
+        update sys_user
+        set last_login_time = #{lastLoginTime},
+            update_time = #{updateTime}
+        where id = #{id}
+          and deleted = 0
+    </update>
+
+    <!-- 按 ID 查询 -->
+    <select id="selectById" resultType="org.example.entity.SysUser">
+        select <include refid="Base_Column_List"/>
+        from sys_user
+        where id = #{id}
+          and deleted = 0
+        limit 1
+    </select>
+
+</mapper>
