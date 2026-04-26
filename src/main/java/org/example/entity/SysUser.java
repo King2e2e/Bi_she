@@ -17,6 +17,7 @@ public class SysUser implements Serializable {
     private String avatar;
     private Integer status;
     private Integer deleted;
+    private String role;
     private LocalDateTime lastLoginTime;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
@@ -92,6 +93,14 @@ public class SysUser implements Serializable {
 
     public void setDeleted(Integer deleted) {
         this.deleted = deleted;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public LocalDateTime getLastLoginTime() {

@@ -40,6 +40,7 @@ public class SysUserService {
         }
 
         user.setNickname(ObjectUtil.isEmpty(user.getNickname()) ? user.getUsername() : user.getNickname());
+        user.setRole(ObjectUtil.isEmpty(user.getRole()) ? "user" : user.getRole());
         user.setStatus(1);
         user.setDeleted(0);
         user.setCreateTime(LocalDateTime.now());
