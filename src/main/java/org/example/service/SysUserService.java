@@ -9,6 +9,7 @@ import org.example.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 系统用户业务层。
@@ -70,5 +71,9 @@ public class SysUserService {
 
         dbUser.setPassword(null);
         return dbUser;
+    }
+
+    public List<SysUser> selectAll(String keyword) {
+        return sysUserMapper.selectAll(keyword);
     }
 }

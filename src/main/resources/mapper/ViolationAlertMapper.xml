@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.mapper.ViolationAlertMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.entity.ViolationAlert">
+        <id column="id" property="id" />
+        <result column="source" property="source" />
+        <result column="type" property="type" />
+        <result column="risk_level" property="riskLevel" />
+        <result column="description" property="description" />
+        <result column="confidence" property="confidence" />
+        <result column="image_path" property="imagePath" />
+        <result column="status" property="status" />
+        <result column="alert_time" property="alertTime" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <insert id="insert" parameterType="org.example.entity.ViolationAlert" useGeneratedKeys="true" keyProperty="id">
+        insert into violation_alert
+        (source, type, risk_level, description, confidence, image_path, status, alert_time, create_time, update_time)
+        values
+        (#{source}, #{type}, #{riskLevel}, #{description}, #{confidence}, #{imagePath}, #{status}, #{alertTime}, #{createTime}, #{updateTime})
+    </insert>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from violation_alert order by alert_time desc, id desc
+    </select>
+
+    <delete id="deleteById">
+        delete from violation_alert where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from violation_alert where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

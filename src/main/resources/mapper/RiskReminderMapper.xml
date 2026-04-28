@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.mapper.RiskReminderMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.entity.RiskReminder">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="alert_id" property="alertId" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="read_status" property="readStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <insert id="insert" parameterType="org.example.entity.RiskReminder" useGeneratedKeys="true" keyProperty="id">
+        insert into risk_reminder
+        (user_id, alert_id, title, content, read_status, create_time, update_time)
+        values
+        (#{userId}, #{alertId}, #{title}, #{content}, #{readStatus}, #{createTime}, #{updateTime})
+    </insert>
+
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        select * from risk_reminder where user_id = #{userId} order by create_time desc, id desc
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from risk_reminder order by create_time desc, id desc
+    </select>
+
+    <update id="updateReadStatus">
+        update risk_reminder set read_status = #{readStatus}, update_time = now() where id = #{id}
+    </update>
+
+    <update id="updateReadStatusByUserId">
+        update risk_reminder set read_status = #{readStatus}, update_time = now() where user_id = #{userId}
+    </update>
+
+    <delete id="deleteById">
+        delete from risk_reminder where id = #{id}
+    </delete>
+
+</mapper>

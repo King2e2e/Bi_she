@@ -4,10 +4,14 @@ import jakarta.annotation.Resource;
 import org.example.common.Result;
 import org.example.entity.SysUser;
 import org.example.service.SysUserService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 系统用户认证控制器。
@@ -32,5 +36,11 @@ public class SysUserController {
     public Result login(@RequestBody SysUser user) {
         SysUser loginUser = sysUserService.login(user);
         return Result.success(loginUser);
+    }
+
+    @GetMapping("/selectAll")
+    public Result selectAll(@RequestParam(required = false) String keyword) {
+        List<SysUser> list = sysUserService.selectAll(keyword);
+        return Result.success(list);
     }
 }

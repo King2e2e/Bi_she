@@ -1,63 +1,61 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="org.example.mapper.SysUserMapper">
 
-    <!-- 公共查询字段 -->
-    <sql id="Base_Column_List">
-        id, username, password, nickname, phone, email, avatar, status, deleted,
-        last_login_time, create_time, update_time
-    </sql>
+    <resultMap id="BaseResultMap" type="org.example.entity.SysUser">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="nickname" property="nickname" />
+        <result column="phone" property="phone" />
+        <result column="email" property="email" />
+        <result column="avatar" property="avatar" />
+        <result column="status" property="status" />
+        <result column="deleted" property="deleted" />
+        <result column="role" property="role" />
+        <result column="last_login_time" property="lastLoginTime" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="token" property="token" />
+    </resultMap>
 
-    <!-- 新增用户 -->
     <insert id="insert" parameterType="org.example.entity.SysUser" useGeneratedKeys="true" keyProperty="id">
         insert into sys_user
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="username != null">username,</if>
-            <if test="password != null">password,</if>
-            <if test="nickname != null">nickname,</if>
-            <if test="phone != null">phone,</if>
-            <if test="email != null">email,</if>
-            <if test="avatar != null">avatar,</if>
-            <if test="status != null">status,</if>
-            <if test="deleted != null">deleted,</if>
-            <if test="lastLoginTime != null">last_login_time,</if>
-            <if test="createTime != null">create_time,</if>
-            <if test="updateTime != null">update_time,</if>
-        </trim>
+        (username, password, nickname, phone, email, avatar, status, deleted, role, last_login_time, create_time, update_time)
         values
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="username != null">#{username},</if>
-            <if test="password != null">#{password},</if>
-            <if test="nickname != null">#{nickname},</if>
-            <if test="phone != null">#{phone},</if>
-            <if test="email != null">#{email},</if>
-            <if test="avatar != null">#{avatar},</if>
-            <if test="status != null">#{status},</if>
-            <if test="deleted != null">#{deleted},</if>
-            <if test="lastLoginTime != null">#{lastLoginTime},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-        </trim>
+        (#{username}, #{password}, #{nickname}, #{phone}, #{email}, #{avatar}, #{status}, #{deleted}, #{role}, #{lastLoginTime}, #{createTime}, #{updateTime})
     </insert>
 
-    <!-- 更新最后登录时间 -->
     <update id="updateLastLoginTime" parameterType="org.example.entity.SysUser">
-        update sys_user
-        set last_login_time = #{lastLoginTime},
-            update_time = #{updateTime}
+        update sys_user set last_login_time = #{lastLoginTime}, update_time = now()
         where id = #{id}
-          and deleted = 0
     </update>
 
-    <!-- 按 ID 查询 -->
-    <select id="selectById" resultType="org.example.entity.SysUser">
-        select <include refid="Base_Column_List"/>
-        from sys_user
-        where id = #{id}
-          and deleted = 0
-        limit 1
+    <select id="selectByUsername" resultMap="BaseResultMap">
+        select * from sys_user where username = #{username} and deleted = 0 limit 1
+    </select>
+
+    <select id="selectByPhone" resultMap="BaseResultMap">
+        select * from sys_user where phone = #{phone} and deleted = 0 limit 1
+    </select>
+
+    <select id="selectByEmail" resultMap="BaseResultMap">
+        select * from sys_user where email = #{email} and deleted = 0 limit 1
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from sys_user
+        <where>
+            deleted = 0
+            <if test="keyword != null and keyword != ''">
+                and (username like concat('%', #{keyword}, '%')
+                or nickname like concat('%', #{keyword}, '%')
+                or phone like concat('%', #{keyword}, '%')
+                or email like concat('%', #{keyword}, '%'))
+            </if>
+        </where>
+        order by id desc
     </select>
 
 </mapper>
